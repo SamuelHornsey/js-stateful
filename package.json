@@ -1,0 +1,50 @@
+{
+  "name": "js-stateful",
+  "version": "0.0.0",
+  "description": "Vanilla JS State Management",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build:watch": "rollup -c rollup.config.js --watch",
+    "build:prod": "rollup -c rollup.config.js",
+    "clean": "rimraf dist",
+    "precommit": "npm run clean && npm run build:prod && npm run test && git add -A",
+    "test": "bundlesize"
+  },
+  "pre-commit": [
+    "precommit"
+  ],
+  "bundlesize": [
+    {
+      "path": "./dist/router.mjs",
+      "maxSize": "3 kB"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SamuelHornsey/js-stateful.git"
+  },
+  "keywords": [
+    "State",
+    "Management",
+    "Vanilla",
+    "JS"
+  ],
+  "author": "Samuel Hornsey (SH)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SamuelHornsey/js-stateful/issues"
+  },
+  "homepage": "https://github.com/SamuelHornsey/js-stateful#readme",
+  "devDependencies": {
+    "bundlesize": "^0.18.0",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.5.0",
+    "rollup-plugin-typescript": "^1.0.0",
+    "tslib": "^1.9.3",
+    "typescript": "^3.7.2"
+  }
+}
