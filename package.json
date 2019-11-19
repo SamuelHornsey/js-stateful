@@ -18,7 +18,7 @@
   ],
   "bundlesize": [
     {
-      "path": "./dist/router.mjs",
+      "path": "./dist/state.mjs",
       "maxSize": "3 kB"
     }
   ],
