@@ -95,8 +95,13 @@ class Store {
         this.state = Object.assign(this.state, newState);
         return true;
     }
-    on(event, handler) {
-        this.queue.subscribe(event, handler);
+    /**
+     * Subscribe to event
+     * @param event string
+     * @param handler Function
+     */
+    onChange(handler) {
+        this.queue.subscribe('stateChange', handler);
     }
 }
 

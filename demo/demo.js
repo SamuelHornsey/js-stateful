@@ -26,7 +26,7 @@ const params = {
 
 const store = new Store(params);
 
-store.on('stateChange', state => console.log(state.items));
+store.onChange(state => console.log(state.items));
 
 console.log(store);
 

@@ -116,7 +116,12 @@ export default class Store {
     return true;
   }
   
-  public on (event: string, handler: Function) {
-    this.queue.subscribe(event, handler);
+  /**
+   * Subscribe to event
+   * @param event string
+   * @param handler Function
+   */
+  public onChange (handler: Function) {
+    this.queue.subscribe('stateChange', handler);
   }
 }
