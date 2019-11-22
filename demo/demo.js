@@ -5,7 +5,7 @@ const state = {
 };
 
 const mutations = {
-  addItem (state, payload) {
+  'ADD_ITEM': (state, payload) => {
     state.items.push(payload);
 
     return state;
