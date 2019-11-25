@@ -2,7 +2,7 @@
   "name": "js-stateful",
   "version": "0.0.0",
   "description": "Vanilla JS State Management",
-  "main": "index.js",
+  "main": "dist/state.mjs",
   "directories": {
     "lib": "lib"
   },
