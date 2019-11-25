@@ -5,9 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>JS Stateful</title>
+
+    <link rel="stylesheet" href="main.css" />
   </head>
   <body>
-    <h1>Hello World</h1>
+    <section class="todoapp js-todo">
+
+      <header class="header">
+        <h1>todos</h1>
+        <input
+          class="new-todo js-input"
+          placeholder="What needs to be done?"
+          autofocus
+        />
+      </header>
+
+      <section class="main js-main">
+        <input id="toggle-all" class="toggle-all" type="checkbox" />
+        <label for="toggle-all">Mark all as complete</label>
+        <ul class="todo-list js-list">
+
+        </ul>
+      </section>
+
+      <footer class="footer js-footer">
+        <span class="todo-count js-count"></span>
+        <ul class="filters">
+          <li>
+            <a href="#/" class="selected js-all js-page">All</a>
+          </li>
+          <li>
+            <a href="#/active" class="selected js-active js-page">Active</a>
+          </li>
+          <li>
+            <a href="#/completed" class="selected js-completed js-page">Completed</a>
+          </li>
+        </ul>
+        <button class="clear-completed js-clear">Clear completed</button>
+      </footer>
+      
+    </section>
+
+    <footer class="info">
+      <p>Double-click to edit a todo</p>
+      <p>
+        Created by <a href="https://github.com/SamuelHornsey">Samuel Hornsey</a>
+      </p>
+      <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+    </footer>
 
     <script type="module" src="demo.js"></script>
   </body>

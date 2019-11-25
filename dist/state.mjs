@@ -36,13 +36,14 @@ class Store {
      */
     constructor(params) {
         this.queue = new Queue();
-        this.status = 'resting';
-        if ('actions' in params) {
-            this.actions = params.actions;
-        }
-        if ('mutations' in params) {
+        this.status = "resting";
+        // Set debug param
+        this.debug = params.debug || false;
+        // Add mutations from params
+        if ("mutations" in params) {
             this.mutations = params.mutations;
         }
+        // Create the state proxy
         this.state = this.createProxy(params.state);
     }
     /**
@@ -50,53 +51,58 @@ class Store {
      * @param state object
      */
     createProxy(state) {
-        const config = {
-            set: (state, key, value) => {
-                state[key] = value;
-                console.log(`stateChange: ${key}: ${value}`);
-                this.queue.publish('stateChange', this.state);
-                if (this.status !== 'mutation') {
-                    console.warn(`You should use a mutation to set ${key}`);
-                }
-                this.status = 'resting';
-                return true;
+        const set = (state, key, value) => {
+            // Set the state
+            state[key] = value;
+            this.debug
+                ? console.log(`stateChange: { ${key}: ${JSON.stringify(value)} }`)
+                : null;
+            // Publish an event
+            this.queue.publish("stateChange", this.state);
+            // Warn if the user is not using a mutation
+            if (this.status !== "mutation") {
+                console.warn(`You should use a mutation to set ${key}`);
             }
+            return true;
         };
-        return new Proxy((state || {}), config);
+        // return the new proxy
+        return new Proxy(state || {}, { set });
+    }
+    /**
+     * Commit the new state
+     * @param newState object
+     */
+    commit(newState) {
+        this.status = "mutation";
+        this.state = Object.assign(this.state, newState);
+        this.status = "resting";
     }
     /**
      * Dispatch an action
      * @param action string
      * @param payload any
      */
-    dispatch(action, payload) {
-        if (typeof this.actions[action] !== 'function') {
-            console.error(`Action ${action} does not exist`);
+    dispatch(action) {
+        // Error if the action type does not exit
+        if (!(action.type in this.mutations)) {
+            console.error(`Action ${action.type} does not exist`);
             return false;
         }
-        console.groupCollapsed(`ACTION: ${action}`);
-        this.status = 'action';
-        this.actions[action](this, payload);
-        console.groupEnd();
+        this.debug ? console.groupCollapsed(`ACTION: ${action.type}`) : null;
+        // Mutate the state and get new state
+        this.status = "action";
+        const newState = this.mutations[action.type](Object.assign({}, this.state), action);
+        // Commit the new state
+        this.commit(newState);
+        this.debug ? console.groupEnd() : null;
         return true;
     }
     /**
-     * Commit state to the store
-     * @param mutation string
-     * @param payload any
+     * Handle on state change
+     * @param handler Function
      */
-    commit(mutation, payload) {
-        if (typeof this.mutations[mutation] !== 'function') {
-            console.log(`Mutation ${mutation} does not exist`);
-            return false;
-        }
-        this.status = 'mutation';
-        const newState = this.mutations[mutation](this.state, payload);
-        this.state = Object.assign(this.state, newState);
-        return true;
-    }
-    on(event, handler) {
-        this.queue.subscribe(event, handler);
+    onChange(handler) {
+        this.queue.subscribe("stateChange", handler);
     }
 }
 

@@ -1,37 +1,42 @@
-import Store from '../dist/state.mjs';
+import Store from "../dist/state.mjs";
+import Todo from "./todo.js";
 
-const state = {
-  items: []
-};
+(() => {
+  const state = {
+    items: []
+  };
 
-const mutations = {
-  'ADD_ITEM': (state, payload) => {
-    state.items.push(payload);
+  const mutations = {
+    ADD_ITEM: (state, action) => {
+      state.items.push(action.item);
 
-    return state;
-  }
-};
+      return state;
+    },
+    REMOVE_ITEM: (state, action) => {
+      const { item } = action;
 
-const actions = {
-  addItem (context, payload) {
-    context.commit('addItem', payload);
-  }
-};
+      state.items = state.items.filter((val) => (val.id !== item.id));
 
-const params = {
-  mutations,
-  actions,
-  state
-}
+      return state;
+    },
+    TOGGLE_DONE: (state, action) => {
+      const { item } = action;
 
-const store = new Store(params);
+      state.items = state.items.map((val) => {
+        if (val.id === item.id) {
+          val.complete = !val.complete;
+        }
 
-store.on('stateChange', state => console.log(state.items));
+        return val;
+      });
 
-console.log(store);
+      return state;
+    }
+  };
 
-store.dispatch('addItem', { user: 'Sam' });
+  const store = new Store({ state, mutations, debug: true });
 
-setTimeout(() => {
-  store.dispatch('addItem', { user: 'Sam' });
-}, 1000);
+  const todo = new Todo(store);
+
+  todo.init();
+})();
