@@ -1,6 +1,6 @@
 {
   "name": "js-stateful",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Vanilla JS State Management",
   "main": "dist/state.mjs",
   "directories": {
